@@ -1,10 +1,16 @@
+# script to 
 import csv
 from datetime import datetime
 from typing import List, Dict
 
 import feedparser
 from bs4 import BeautifulSoup
+from time import time
+import os
+import pathlib
 
+script_directory = pathlib.Path(__file__).parent.resolve()
+data_directory = os.path.join(os.path.dirname(script_directory), "data")
 
 RSS_URLS = "rss_urls.txt"
 
@@ -94,8 +100,15 @@ def main():
         seen.add(a["link"])
         unique_articles.append(a)
 
-    write_to_csv("crypto_news.csv", unique_articles)
+    now = datetime.now()
+    date_string = now.strftime("%Y-%m-%d")
+    rss_feeds_directory = os.path.join(data_directory, "rss_feeds")
+    os.system(f"mkdir -p {rss_feeds_directory}")
 
+
+
+    csv_path = os.path.join(data_directory,"rss_feeds", f"crypt_news_{date_string}.csv")
+    write_to_csv(csv_path, unique_articles)
 
 if __name__ == "__main__":
     main()
